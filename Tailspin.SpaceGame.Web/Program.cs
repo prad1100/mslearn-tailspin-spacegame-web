@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace TailSpin.SpaceGame.Web
 {
+    //test sonar qube
     public class Program
     {
         public static void Main(string[] args)
