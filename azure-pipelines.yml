@@ -33,19 +33,19 @@ steps:
     workingDirectory: $(wwwrootDir)
   
   - task: DotNetCoreCLI@2
-    displayName: 'Restore project dependencies'
+    displayName: 'Pack the project - $(buildConfiguration)'
     inputs:
-      command: 'restore'
+      command: 'pack'
       projects: '**/*.csproj'
-  
-  - template: templates/build.yml
-    parameters:
-      buildConfiguration: 'Debug'
-  
-  - template: templates/build.yml
-    parameters:
-      buildConfiguration: 'Release'
-  
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: drop'
-    condition: succeeded()
+      arguments: '--no-build --configuration $(buildConfiguration)'
+      versioningScheme: byPrereleaseNumber
+      majorVersion: '1'
+      minorVersion: '0'
+      patchVersion: '0'
+  - task: NuGetCommand@2
+    displayName: 'Publish NuGet package'
+    inputs:
+     command: push
+     publishVstsFeed: 'Space Game - web - Dependencies/Tailspin.SpaceGame.Web.Models'
+     allowPackageConflicts: true
+    condition: succeeded()  
